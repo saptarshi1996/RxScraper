@@ -15,7 +15,7 @@ export class PuppeteerService {
    * @param useProxy 
    */
   public async createBrowser(): Promise<void> {
-    this.browser = await puppeteer.launch();
+    this.browser = await puppeteer.launch({ headless: false });
   }
 
   /**
@@ -39,6 +39,49 @@ export class PuppeteerService {
     } catch (ex) {
       console.log(ex.message);
     }
+  }
+
+  /**
+   * Get goodrx data
+   * @param drugPayload 
+   * @returns 
+   */
+  public getGoodRxDrugId(drugPayload: IAllDrugCouponPayload): Promise<number> {
+    return new Promise(async (resolve, reject) => {
+      try {
+
+        await this.createBrowser();
+        await this.createPage();
+        this.page.on("request", (request) => {
+          if ([].indexOf(request.resourceType()) !== -1) {
+            request.abort();
+          } else {
+            request.continue();
+          }
+        });
+
+        const url: string = `https://www.goodrx.com/${drugPayload.drug_name.toLowerCase()}`;
+        await this.page.goto(url, {
+          waitUntil: "domcontentloaded",
+        });
+
+        const state: any = await this.page.evaluate(() => {
+          return (window as any).__state__;
+        });
+
+        await this.closeBrowser();
+
+        const choiceList: any[] = state.reduxAsyncConnect.catchAllPageData.drugConcepts.choices;
+        const choice: any = choiceList.find((choice: any) => drugPayload.drug_name.toLowerCase() == choice.label.name.toLowerCase());
+        const drugId: number = choice.id;
+
+        resolve(drugId);
+
+      } catch (ex) {
+        await this.closeBrowser();
+        reject(ex);
+      }
+    });
   }
 
   /**

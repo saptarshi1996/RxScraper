@@ -27,7 +27,6 @@ export class AllDrugCouponValidation {
       site_name: Joi.string().allow(
         "buzz_rx",
         "good_rx",
-        "well_rx",
         "americas_pharmacy",
         "perks_optum",
         "single_care",
