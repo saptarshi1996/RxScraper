@@ -30,6 +30,7 @@ export class AllDrugCouponValidation {
         "americas_pharmacy",
         "perks_optum",
         "single_care",
+        "well_rx",
       ).required().label("Site name"),
     });
   }

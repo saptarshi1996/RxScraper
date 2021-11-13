@@ -8,6 +8,7 @@ import {
   PerksOptumService,
   BuzzRxService,
   GoodRxService,
+  WellRxService,
 } from "../services";
 
 export class ScraperController { 
@@ -19,6 +20,7 @@ export class ScraperController {
   private readonly perksOptumService: PerksOptumService;
   private readonly buzzRxService: BuzzRxService;
   private readonly goodRxService: GoodRxService;
+  private readonly wellRxService: WellRxService;
 
   constructor() { 
     this.responseHelper = new ResponseHelper();
@@ -28,6 +30,7 @@ export class ScraperController {
     this.perksOptumService = new PerksOptumService();
     this.buzzRxService = new BuzzRxService();
     this.goodRxService = new GoodRxService();
+    this.wellRxService = new WellRxService();
 
   }
 
@@ -53,6 +56,9 @@ export class ScraperController {
           break;
         case "perks_optum":
           result = await this.perksOptumService.scrapePerksOptum(allDrugCoupon);
+          break;
+        case "well_rx":
+          result = await this.wellRxService.scrapeWellRx(allDrugCoupon);
           break;
       }
 

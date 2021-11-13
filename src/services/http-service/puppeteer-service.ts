@@ -1,6 +1,6 @@
 import puppeteer, { Browser, Page } from "puppeteer";
 
-import { IAllDrugCouponPayload } from "../../interfaces";
+import { IAllDrugCouponPayload, IDrugScraperResponse } from "../../interfaces";
 
 export class PuppeteerService {
 
@@ -80,6 +80,51 @@ export class PuppeteerService {
       } catch (ex) {
         await this.closeBrowser();
         reject(ex);
+      }
+    });
+  }
+
+  public getWellRxData(drugPayload: IAllDrugCouponPayload): Promise<IDrugScraperResponse[]> { 
+    return new Promise(async (resolve, reject) => {
+      try {
+
+        await this.createBrowser();
+        await this.createPage();
+
+        const siteUrl: string = `https://www.wellrx.com/prescriptions/${drugPayload.drug_name}/${drugPayload.zip_code}`;
+        this.page.on("request", (request) => {
+          if (["font", "image", "stylesheet"].indexOf(request.resourceType()) !== -1) {
+            request.abort();
+          } else {
+            request.continue();
+          }
+        });
+
+        await this.page.goto(siteUrl, {
+          waitUntil: "networkidle0",
+        });
+
+        const result: IDrugScraperResponse[] | any = await this.page.evaluate(() => {
+          return Array.from(document.getElementsByClassName("grid-x pharmCard")).map((grid: any) => {
+            const name: any = grid.getElementsByClassName("list-title")[0].textContent ? grid.getElementsByClassName("list-title")[0].textContent : grid.getElementsByClassName("list-title")[0].children[0].innerText;
+            const price = grid.getElementsByClassName("price price-large")[0].textContent.replace(/\$/g, "");    
+            return {
+              name: name,
+              price,
+              distance: Array.from(grid.getElementsByClassName("pharmacy-locations")).map((distances: any) => {
+                return Array.from(distances.getElementsByClassName("list-contact-text")).map((distance: any) => distance.textContent.replace(/[\s\n]/g, "")).filter(distance => distance.includes("mi"));
+              })[0],
+            };
+          });
+        });
+
+        await this.closeBrowser();
+        resolve(result)
+
+      } catch (ex) {
+        console.log(ex.message);
+        await this.closeBrowser();
+        resolve([]);
       }
     });
   }
