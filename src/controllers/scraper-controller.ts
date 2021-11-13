@@ -16,8 +16,6 @@ export class ScraperController {
       const allDrugCoupon = req.payload as IAllDrugCouponPayload;
       const siteName = req.query.site_name as string;
 
-      console.log(allDrugCoupon);
-
       switch (siteName) {
         case "single_care":
           break;
@@ -28,8 +26,6 @@ export class ScraperController {
         case "buzz_rx":
           break;
         case "perks_optum":
-          break;
-        case "discount_drugs":
           break;
         case "well_rx":
           break;
