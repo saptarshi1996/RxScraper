@@ -1,0 +1,19 @@
+version: "3"
+
+services:
+
+  rx_scraper:
+      
+      working_dir: /usr/src/app
+      container_name: rx_scraper
+
+      build: .
+
+      expose:
+      - "8085"
+      - "6379"
+
+      ports:
+        - "8085:8085"
+
+      command: bash -c "npm run build && node dist/index.js"
