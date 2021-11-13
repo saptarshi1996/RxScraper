@@ -14,6 +14,7 @@ export class AllDrugCouponValidation {
     this.payload = Joi.object({
       drug_name: Joi.string().label("Drug name"),
       zip_code: Joi.string().length(5).required().label("Zip code"),
+      quantity: Joi.string().required().label("Quantity"),
     });
   }
 
@@ -24,12 +25,11 @@ export class AllDrugCouponValidation {
   private setQuery(): void {
     this.query = Joi.object({
       site_name: Joi.string().allow(
-        "buzz_rx2",
+        "buzz_rx",
         "good_rx",
         "well_rx",
-        "america_pharmacy",
+        "americas_pharmacy",
         "perks_optum",
-        "discount_drugs",
         "single_care",
       ).required().label("Site name"),
     });
