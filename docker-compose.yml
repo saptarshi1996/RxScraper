@@ -7,13 +7,14 @@ services:
       working_dir: /usr/src/app
       container_name: rx_scraper
 
+      restart: always
+
       build: .
 
       expose:
-      - "8085"
-      - "6379"
+      - "8081"
 
       ports:
-        - "8085:8085"
+        - "8081:8081"
 
       command: bash -c "npm run build && node dist/index.js"
