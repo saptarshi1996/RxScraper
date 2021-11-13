@@ -5,6 +5,8 @@ import { ResponseHelper } from "../helpers";
 import { 
   SingleCareService,
   AmericaPharmacyService,
+  PerksOptumService,
+  BuzzRxService,
 } from "../services";
 
 export class ScraperController { 
@@ -13,11 +15,17 @@ export class ScraperController {
 
   private readonly singleCareService: SingleCareService;
   private readonly americasPharmacyService: AmericaPharmacyService;
+  private readonly perksOptumService: PerksOptumService;
+  private readonly buzzRxService: BuzzRxService;
 
   constructor() { 
     this.responseHelper = new ResponseHelper();
+
     this.singleCareService = new SingleCareService();
     this.americasPharmacyService = new AmericaPharmacyService();
+    this.perksOptumService = new PerksOptumService();
+    this.buzzRxService = new BuzzRxService();
+
   }
 
   public allPricesAndCouponsController = async (req: Request, h: ResponseToolkit) => {
@@ -37,8 +45,10 @@ export class ScraperController {
           result = await this.americasPharmacyService.scrapeAmericasPharmacy(allDrugCoupon);
           break;
         case "buzz_rx":
+          result = await this.buzzRxService.scrapeBuzzRx(allDrugCoupon);
           break;
         case "perks_optum":
+          result = await this.perksOptumService.scrapePerksOptum(allDrugCoupon);
           break;
         case "well_rx":
           break;

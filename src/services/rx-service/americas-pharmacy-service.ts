@@ -77,7 +77,6 @@ export class AmericaPharmacyService {
       } catch (ex) { 
         resolve([]);
       }
-      
     });
   }
 
