@@ -1,7 +1,9 @@
 ## Description
 
 Scraping data from various RX site and list them using puppeteer and cheerio. 
+
 Tech Stack: Typescript, Hapi typescript
+
 Deployment: Docker
 
 API has been documented with hapi-swagger
