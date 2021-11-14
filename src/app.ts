@@ -11,6 +11,7 @@ export class Application {
 
   private readonly constant: Constant;
 
+  // Create server
   private server: Server;
   private swaggerOptions: HapiSwagger.RegisterOptions;
 
