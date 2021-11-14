@@ -4,7 +4,7 @@ services:
 
   rx_scraper:
       
-      working_dir: /usr/src/app
+      working_dir: /app
       container_name: rx_scraper
 
       restart: always
@@ -12,9 +12,23 @@ services:
       build: .
 
       expose:
-      - "8081"
+        - "8085"
 
       ports:
-        - "8081:8081"
+        - "8085:8085"
 
       command: bash -c "npm run build && node dist/index.js"
+
+      depends_on:
+        - browserless
+
+  browserless:
+
+    image: browserless/chrome:latest
+    restart: always
+
+    ports:
+      - "3000:3000"
+
+    expose: 
+      - "3000"
