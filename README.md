@@ -2,7 +2,7 @@
 
 Scraping data from various RX site and list them using puppeteer and cheerio. 
 
-Tech Stack: Typescript, Hapi typescript
+Tech Stack: Hapi with Typescript
 
 Deployment: Docker
 
