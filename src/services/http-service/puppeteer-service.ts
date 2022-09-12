@@ -15,7 +15,7 @@ export class PuppeteerService {
    * @param useProxy 
    */
   public async createBrowser(): Promise<void> {
-    this.browser = await puppeteer.connect({ browserWSEndpoint: 'ws://browserless:3000' });
+    this.browser = await puppeteer.connect({ browserWSEndpoint: 'ws://localhost:3000' });
   }
 
   /**
